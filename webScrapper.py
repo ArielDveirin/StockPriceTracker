@@ -1,15 +1,26 @@
 from urllib.request import urlopen
 import requests
 
-url = "https://money.cnn.com/quote/quote.html?symb=CHANGE"
-stock = input("choose a stock to track: ")
-url = url.replace("CHANGE", stock)
-print(url)
 
-page = requests.get(url)
+ActualUrl = "https://money.cnn.com/quote/quote.html?symb=CHANGE"
 
-priceIndex = page.text.find('"BatsUS">') + 9 # nine is a constant to get to the number
-endPriceIndex = page.text[priceIndex:priceIndex+20].find("</")
-stockPrice = page.text[priceIndex:priceIndex+endPriceIndex]
+def findPrice(stock):
+    url = ActualUrl #created for the changed that will happen to Url later.
 
-print(stock + "\n" + "Price is: " + stockPrice)
+    url = url.replace("CHANGE", stock)
+
+    page = requests.get(url)
+
+    priceIndex = page.text.find('"BatsUS">') + 9 # nine is a constant to get to the number
+    endPriceIndex = page.text[priceIndex:priceIndex+20].find("</")
+    stockPrice = page.text[priceIndex:priceIndex+endPriceIndex]
+
+    return stockPrice
+
+
+def main():
+    stock = input("choose a stock to track: ")
+    print(findPrice(stock))
+
+if __name__=="__main__":
+    main()
